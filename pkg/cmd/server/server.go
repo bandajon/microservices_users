@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"database/sql"
-	"flag"
 	"fmt"
 
 	// mysql driver
@@ -11,6 +10,14 @@ import (
 
 	"github.com/bandajon/microservices_users/pkg/protocol/grpc"
 	v1 "github.com/bandajon/microservices_users/pkg/service/v1"
+)
+
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = "mypass"
+	dbname   = "postgres"
 )
 
 // Config is configuration for Server
@@ -35,13 +42,14 @@ func RunServer() error {
 	ctx := context.Background()
 
 	// get configuration
-	var cfg Config
+	/*var cfg Config
 	flag.StringVar(&cfg.GRPCPort, "grpc-port", "", "gRPC port to bind")
 	flag.StringVar(&cfg.DatastoreDBHost, "db-host", "", "Database host")
 	flag.StringVar(&cfg.DatastoreDBUser, "db-user", "", "Database user")
 	flag.StringVar(&cfg.DatastoreDBPassword, "db-password", "", "Database password")
 	flag.StringVar(&cfg.DatastoreDBSchema, "db-schema", "", "Database schema")
 	flag.Parse()
+
 
 	if len(cfg.GRPCPort) == 0 {
 		return fmt.Errorf("invalid TCP port for gRPC server: '%s'", cfg.GRPCPort)
@@ -57,13 +65,26 @@ func RunServer() error {
 		cfg.DatastoreDBHost,
 		cfg.DatastoreDBSchema,
 		param)
-	db, err := sql.Open("mysql", dsn)
+	*/
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	db, err := sql.Open("postgres", psqlconn)
 	if err != nil {
 		return fmt.Errorf("failed to open database: %v", err)
 	}
 	defer db.Close()
 
+	err = db.Ping()
+	CheckError(err)
+
+	fmt.Println("Connected!")
+
 	v1API := v1.NewToDoServiceServer(db)
 
-	return grpc.RunServer(ctx, v1API, cfg.GRPCPort)
+	return grpc.RunServer(ctx, v1API, port)
+}
+
+func CheckError(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
