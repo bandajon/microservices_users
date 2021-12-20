@@ -1,4 +1,4 @@
-package cmd
+package server
 
 import (
 	"context"
@@ -7,10 +7,10 @@ import (
 	"fmt"
 
 	// mysql driver
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/jackc/pgx/v4/stdlib"
 
 	"github.com/bandajon/microservices_users/pkg/protocol/grpc"
-	"github.com/bandajon/microservices_users/pkg/service/v1"
+	v1 "github.com/bandajon/microservices_users/pkg/service/v1"
 )
 
 // Config is configuration for Server

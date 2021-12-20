@@ -10,7 +10,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/bandajon/microservices_users/pkg/api/v1"
+	. "github.com/bandajon/microservices_users/pkg/api/proto/v1"
+
+	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
 const (

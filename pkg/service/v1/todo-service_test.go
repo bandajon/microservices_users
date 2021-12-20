@@ -11,7 +11,7 @@ import (
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 
-	"github.com/bandajon/microservices_users/pkg/api/v1"
+	"github.com/bandajon/microservices_users/pkg/api/proto/v1"
 )
 
 func Test_toDoServiceServer_Create(t *testing.T) {
